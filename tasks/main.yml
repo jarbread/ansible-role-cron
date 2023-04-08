@@ -1,0 +1,45 @@
+---
+- name: Install cron packages
+  apt:
+    name: cron
+    state: present
+
+- name: Create cron log base directory
+  file:
+    path: "{{ cron_log_base_dir }}"
+    state: directory
+    mode: "0755"
+    when: create_cron_log_base_dir
+
+- name: Create cron log directories
+  file:
+    path: "{{ cron_log_base_dir }}/{{ item.dir_name }}"
+    state: directory
+    mode: "0750"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group | default(item.owner) }}"
+  loop: "{{ cron_log_dir }}"
+  when: create_cron_log_base_dir and cron_log_dir|length > 0
+
+- name: Configure cron jobs
+  cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    user: "{{ item.user | default('root') }}"
+    minute: "{{ item.minute | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    day: "{{ item.day | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    special_time: "{{ item.special_time | default(omit) }}"
+    disabled: "{{ item.disabled | default(omit) }}"
+    state: "{{ item.present | default(present) }}"
+  loop: "{{ cron_jobs }}"
+  when: cron_jobs is defined and cron_jobs|length > 0
+  notify: Restart cron
+
+- name: Ensure cron service is running
+  service:
+    name: cron
+    state: started
+    enabled: true

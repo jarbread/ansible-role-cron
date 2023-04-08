@@ -1,0 +1,10 @@
+---
+# Default cron jobs to configure
+cron_jobs: []
+
+# Default cron directory
+cron_log_base_dir: "/var/log/cron"
+create_cron_log_base_dir: no
+
+# Default cron log dirs to configure
+cron_log_dir: []

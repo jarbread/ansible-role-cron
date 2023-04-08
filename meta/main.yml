@@ -1,0 +1,9 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: cron
+  author: jarbread
+  description: installs and configure cron jobs
+  company: ""
+  min_ansible_version: 2.9.22
