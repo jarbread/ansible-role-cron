@@ -10,9 +10,12 @@ cron_jobs:
   - name: "Run Job at 2:15PM Every Saturday"
     minute: "15"
     hour: "14"
-    day: "SAT"
+    weekday: "SAT"
     job: |-
       su www-data -c "/usr/bin/php7.4 /some/location/php >> {{ cron_log_base_dir }/application/php.log 2>&1"
+  - name: "Run at reboot"
+    special_time: reboot
+    job: "/some/script.sh"
 ```
 
 ### Optional Log Directories

@@ -9,7 +9,7 @@
     path: "{{ cron_log_base_dir }}"
     state: directory
     mode: "0755"
-    when: create_cron_log_base_dir
+  when: create_cron_log_base_dir
 
 - name: Create cron log directories
   file:
@@ -33,7 +33,7 @@
     weekday: "{{ item.weekday | default('*') }}"
     special_time: "{{ item.special_time | default(omit) }}"
     disabled: "{{ item.disabled | default(omit) }}"
-    state: "{{ item.present | default(present) }}"
+    state: "{{ item.state | default('present') }}"
   loop: "{{ cron_jobs }}"
   when: cron_jobs is defined and cron_jobs|length > 0
   notify: Restart cron
