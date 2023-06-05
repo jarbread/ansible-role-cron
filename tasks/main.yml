@@ -15,7 +15,7 @@
   file:
     path: "{{ cron_log_base_dir }}/{{ item.dir_name }}"
     state: directory
-    mode: "0750"
+    mode: "{{ item.mode | default('0750') }}"
     owner: "{{ item.owner }}"
     group: "{{ item.group | default(item.owner) }}"
   loop: "{{ cron_log_dir }}"
